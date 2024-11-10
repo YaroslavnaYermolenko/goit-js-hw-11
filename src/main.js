@@ -16,14 +16,7 @@ async function handlerSubmit(e) {
   const request = e.target.elements.search.value.trim();
   if (!request) {
     loader.style.display = 'none';
-    iziToast.error({
-      title: 'Error',
-      message: 'Request cannot be empty, please, enter text',
-      position: 'topRight',
-      maxWidth: '430px',
-      color: '#EF4040',
-      theme: 'dark',
-    });
+    showAlert('error');
     return;
   }
   const dataImages = await fetchData(request);
@@ -32,13 +25,19 @@ async function handlerSubmit(e) {
     fillGallery(dataImages.hits);
   } else {
     clearGallery();
-    iziToast.error({
-      title: 'Sorry!',
-      message: `There are no images matching your search query. Please try again!`,
-      position: 'topRight',
-      maxWidth: '430px',
-      color: '#EF4040',
-      theme: 'dark',
-    });
+    showAlert('sorry');
   }
+}
+function showAlert(type) {
+  iziToast.error({
+    title: type === 'error' ? 'Error' : '',
+    message:
+      type === 'error'
+        ? 'Request cannot be empty, please, enter text'
+        : `Sorry, there are no images matching your search query. Please try again!`,
+    position: 'topRight',
+    maxWidth: '400px',
+    color: '#EF4040',
+    theme: 'dark',
+  });
 }
